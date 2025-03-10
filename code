@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form with Validation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center">Signup Form</h2>
+    <form id="signupForm">
+        <div class="mb-3">
+            <label>First Name</label>
+            <input type="text" id="firstName" class="form-control">
+            <span class="error" id="firstNameError"></span>
+        </div>
+        <div class="mb-3">
+            <label>Last Name</label>
+            <input type="text" id="lastName" class="form-control">
+            <span class="error" id="lastNameError"></span>
+        </div>
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" id="email" class="form-control">
+            <span class="error" id="emailError"></span>
+        </div>
+        <div class="mb-3">
+            <label>Date of Birth</label>
+            <input type="date" id="dob" class="form-control">
+            <span class="error" id="dobError"></span>
+        </div>
+        <div class="mb-3">
+            <label>Age</label>
+            <input type="number" id="age" class="form-control">
+            <span class="error" id="ageError"></span>
+        </div>
+        <div class="mb-3">
+            <label>Gender</label><br>
+            <input type="radio" name="gender" value="Male"> Male
+            <input type="radio" name="gender" value="Female"> Female
+            <span class="error" id="genderError"></span>
+        </div>
+        <div class="mb-3">
+            <label>Phone Number</label>
+            <input type="text" id="phone" class="form-control">
+            <span class="error" id="phoneError"></span>
+        </div>
+        <div class="mb-3">
+            <label>Address</label>
+            <textarea id="address" class="form-control"></textarea>
+            <span class="error" id="addressError"></span>
+        </div>
+        <button type="button" class="btn btn-primary w-100" onclick="validateForm()">Signup</button>
+    </form>
+</div>
+
+<div class="container mt-4">
+    <h3 class="text-center">Entered Details</h3>
+    <table class="table table-bordered" id="outputTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Date of Birth</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Phone</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody id="outputBody"></tbody>
+    </table>
+</div>
+
+<script>
+function validateForm() {
+    let isValid = true;
+
+    // Get values
+    let firstName = document.getElementById("firstName").value.trim();
+    let lastName = document.getElementById("lastName").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let dob = document.getElementById("dob").value;
+    let age = document.getElementById("age").value.trim();
+    let gender = document.querySelector('input[name="gender"]:checked');
+    let phone = document.getElementById("phone").value.trim();
+    let address = document.getElementById("address").value.trim();
+
+    // Clear previous errors
+    document.querySelectorAll(".error").forEach(e => e.innerText = "");
+
+    // Validation
+    if (!/^[A-Za-z]{4,}$/.test(firstName)) {
+        document.getElementById("firstNameError").innerText = "First name must be at least 4 letters.";
+        isValid = false;
+    }
+    if (!/^[A-Za-z]{1,}$/.test(lastName)) {
+        document.getElementById("lastNameError").innerText = "Last name must contain only letters.";
+        isValid = false;
+    }
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        document.getElementById("emailError").innerText = "Invalid email format.";
+        isValid = false;
+    }
+    if (dob === "") {
+        document.getElementById("dobError").innerText = "Please enter a valid date.";
+        isValid = false;
+    }
+    if (!/^\d{2}$/.test(age)) {
+        document.getElementById("ageError").innerText = "Age must be a 2-digit number.";
+        isValid = false;
+    }
+    if (!gender) {
+        document.getElementById("genderError").innerText = "Please select a gender.";
+        isValid = false;
+    }
+    if (!/^\d{10}$/.test(phone)) {
+        document.getElementById("phoneError").innerText = "Phone number must be 10 digits.";
+        isValid = false;
+    }
+    if (address === "") {
+        document.getElementById("addressError").innerText = "Address cannot be empty.";
+        isValid = false;
+    }
+
+    if (isValid) {
+        displayData(firstName, lastName, email, dob, age, gender.value, phone, address);
+    }
+}
+
+function displayData(firstName, lastName, email, dob, age, gender, phone, address) {
+    let outputTable = document.getElementById("outputTable");
+    let outputBody = document.getElementById("outputBody");
+
+    let newRow = `<tr>
+                    <td>${firstName}</td>
+                    <td>${lastName}</td>
+                    <td>${email}</td>
+                    <td>${dob}</td>
+                    <td>${age}</td>
+                    <td>${gender}</td>
+                    <td>${phone}</td>
+                    <td>${address}</td>
+                  </tr>`;
+
+    outputBody.innerHTML = newRow;
+    outputTable.style.display = "table";
+}
+</script>
+
+</body>
+</html>
